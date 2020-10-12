@@ -1,21 +1,18 @@
 const trainerService = require('../services/trainer.service');
 const trainerImage = require('../middleware/trainer.image');
 
-function getTrainers(req, res, next) {
-  console.log('in controller');
-  trainerService.getTrainers().then((trainers) => {
-    console.log(trainers);
-    res.status(200).send(trainers);
-  });
+async function getTrainers(req, res, next) {
+  const result = await trainerService.getTrainers();
+  res.status(200).send(result);
 }
-
-function getTrainer(req, res, next) {
+async function getTrainer(req, res, next) {
   const id = req.params.id;
-  console.log('idd' + id);
-  trainerService.getTrainer(id).then((trainers) => {
-    console.log(trainers);
-    res.status(200).send(trainers);
-  });
+  const result = await trainerService.getTrainer(id);
+  if (!result == null) {
+    res.status(200).send(result);
+  } else {
+    res.send('not found');
+  }
 }
 
 async function createTrainer(req, res, next) {
@@ -23,7 +20,6 @@ async function createTrainer(req, res, next) {
   const email = req.body.email;
   const phone = req.body.phone;
   const address = req.body.address;
-
   const status = req.body.status;
   const createdDate = new Date();
   const updatedDate = new Date();
@@ -32,47 +28,26 @@ async function createTrainer(req, res, next) {
   var photoUrl = await trainerImage.uploadFile(filePath, Name + '_' + fileName);
   const url = photoUrl.toString().replace('%20', '_');
 
-  trainerService
-    .createTrainer(
-      Name,
-      email,
-      phone,
-      address,
-      url,
-      status,
-      createdDate,
-      updatedDate
-    )
-    .then((result) => {
-      console.log('New trainer created');
-      res.status(200).send('New trainer created');
-    })
-    .catch((err) => {
-      res.status(404).send(err);
-    });
-}
+  const result = await trainerService.createTrainer(
+    Name,
+    email,
+    phone,
+    address,
+    url,
+    status,
+    createdDate,
+    updatedDate
+  );
 
-function deleteTrainer(req, res, next) {
-  console.log('in contr' + req.params.id);
-  trainerService
-    .deleteTrainer(req.params.id)
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(404).send(err);
-    });
+  res.status(200).send('New trainer created');
 }
-
-function updateTrainer(req, res, next) {
-  trainerService
-    .updateTrainer(req.params.id, req.body)
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(404).send(err);
-    });
+async function deleteTrainer(req, res, next) {
+  const result = await trainerService.deleteTrainer(req.params.id);
+  res.status(200).send(result);
+}
+async function updateTrainer(req, res, next) {
+  const result = await trainerService.updateTrainer(req.params.id, req.body);
+  res.status(200).send(result);
 }
 
 module.exports = {
