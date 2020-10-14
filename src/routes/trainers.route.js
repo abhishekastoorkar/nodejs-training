@@ -12,7 +12,7 @@ router.get('/trainers/:id', trainerController.getTrainer);
 router.post(
   '/trainers',
   upload.single('image'),
-  validate.validateUser,
+  validate(),
   trainerController.createTrainer
 );
 
