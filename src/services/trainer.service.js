@@ -1,123 +1,74 @@
+const { date } = require('joi');
 const model = require('../models');
 const trainerModel = model.tbl_trainers;
 
-function getTrainers() {
-  return new Promise((resolve, reject) => {
-    console.log('in service');
-    trainerModel
-      .findAll({
+async function getTrainers() {
+  result = await trainerModel.findAll({
+    where: {
+      is_active: '1',
+    },
+  });
+  return result;
+}
+
+async function getTrainer(id) {
+  result = await trainerModel.findByPk(id);
+  console.log(result);
+  return result;
+}
+
+async function createTrainer(data, photoUrl) {
+  console.log(data);
+  result = await trainerModel.create({
+    trainer_name: data.name,
+    trainer_email: data.email,
+    trainer_phone: data.phone,
+    trainer_address: data.address,
+    trainer_photo_url: photoUrl,
+    is_active: data.status,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+  return result;
+}
+
+async function deleteTrainer(id) {
+  result = await trainerModel
+    .update(
+      { is_active: '0' },
+      {
+        where: {
+          id: id,
+        },
+      }
+    )
+    .then(() => {
+      trainerModel.findAll({
         where: {
           is_active: '1',
         },
-      })
-      .then((trainers) => {
-        resolve(trainers);
-      })
-      .catch((err) => {
-        reject(err);
       });
-  });
+    });
+  return result;
 }
 
-function getTrainer(id) {
-  return new Promise((resolve, reject) => {
-    console.log('in service');
-    trainerModel
-      .findByPk(id)
-      .then((trainer) => {
-        resolve(trainer);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
-
-function createTrainer(
-  Name,
-  email,
-  phone,
-  address,
-  photoUrl,
-  status,
-  createdDate,
-  updatedDate
-) {
-  return new Promise((resolve, reject) => {
-    trainerModel
-      .create({
-        trainer_name: Name,
-        trainer_email: email,
-        trainer_phone: phone,
-        trainer_address: address,
-        trainer_photo_url: photoUrl,
-        is_active: status,
-        createdAt: createdDate,
-        updatedAt: updatedDate,
-      })
-      .then(() => {
-        resolve('trainer created');
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-}
-
-function deleteTrainer(id) {
-  console.log('in service id' + id);
-  return new Promise((resolve, reject) => {
-    trainerModel
-      .update(
-        { is_active: '0' },
-        {
-          where: {
-            id: id,
-          },
-        }
-      )
-      .then(() => {
-        trainerModel
-          .findAll({
-            where: {
-              is_active: '1',
-            },
-          })
-          .then((trainers) => {
-            resolve(trainers);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-  });
-}
-
-function updateTrainer(id, req) {
-  return new Promise((resolve, reject) => {
-    trainerModel
-      .update(
-        {
-          trainer_name: req.name,
-          trainer_email: req.email,
-          trainer_phone: req.phone,
-          trainer_address: req.address,
-          trainer_photo_url: req.url,
-          is_active: req.status,
-        },
-        {
-          where: {
-            id: id,
-          },
-        }
-      )
-      .then((result) => {
-        resolve(result);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function updateTrainer(id, req, url) {
+  result = await trainerModel.update(
+    {
+      trainer_name: req.name,
+      trainer_email: req.email,
+      trainer_phone: req.phone,
+      trainer_address: req.address,
+      trainer_photo_url: url,
+      is_active: req.status,
+    },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
+  return result;
 }
 
 module.exports = {

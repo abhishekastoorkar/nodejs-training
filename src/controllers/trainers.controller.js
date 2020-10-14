@@ -1,78 +1,88 @@
 const trainerService = require('../services/trainer.service');
 const trainerImage = require('../middleware/trainer.image');
 
-function getTrainers(req, res, next) {
-  console.log('in controller');
-  trainerService.getTrainers().then((trainers) => {
-    console.log(trainers);
-    res.status(200).send(trainers);
-  });
+async function getTrainers(req, res, next) {
+  try {
+    const trainers = await trainerService.getTrainers();
+    return res.status(200).json({ trainers });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 }
 
-function getTrainer(req, res, next) {
-  const id = req.params.id;
-  console.log('idd' + id);
-  trainerService.getTrainer(id).then((trainers) => {
-    console.log(trainers);
-    res.status(200).send(trainers);
-  });
+async function getTrainer(req, res, next) {
+  try {
+    const id = req.params.id;
+    const trainer = await trainerService.getTrainer(id);
+    if (trainer) {
+      return res.status(200).json({ trainer });
+    }
+    return res
+      .status(404)
+      .send('trainer with the specified ID does not exists');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
 }
 
 async function createTrainer(req, res, next) {
-  const Name = req.body.name;
-  const email = req.body.email;
-  const phone = req.body.phone;
-  const address = req.body.address;
+  try {
+    const fileName = req.file.originalname.toString();
+    const filePath = req.file.path.toString();
+    var photoUrl = await trainerImage.uploadFile(
+      filePath,
+      req.body.name + '_' + fileName
+    );
+    const url = photoUrl.toString().replace('%20', '_');
 
-  const status = req.body.status;
-  const createdDate = new Date();
-  const updatedDate = new Date();
-  const fileName = req.file.originalname.toString();
-  const filePath = req.file.path.toString();
-  var photoUrl = await trainerImage.uploadFile(filePath, Name + '_' + fileName);
-  const url = photoUrl.toString().replace('%20', '_');
-
-  trainerService
-    .createTrainer(
-      Name,
-      email,
-      phone,
-      address,
-      url,
-      status,
-      createdDate,
-      updatedDate
-    )
-    .then((result) => {
-      console.log('New trainer created');
-      res.status(200).send('New trainer created');
-    })
-    .catch((err) => {
-      res.status(404).send(err);
+    const trainer = await trainerService.createTrainer(req.body, url);
+    return res.status(201).json({
+      trainer,
     });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 }
 
-function deleteTrainer(req, res, next) {
-  console.log('in contr' + req.params.id);
-  trainerService
-    .deleteTrainer(req.params.id)
-    .then((result) => {
+async function deleteTrainer(req, res, next) {
+  try {
+    const result = await trainerService.deleteTrainer(req.params.id);
+    console.log(result);
+    if (result) {
       res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(404).send(err);
-    });
+    }
+    throw new Error('Trainer not found');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
 }
 
-function updateTrainer(req, res, next) {
-  trainerService
-    .updateTrainer(req.params.id, req.body)
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(404).send(err);
-    });
+async function updateTrainer(req, res, next) {
+  console.log(req.file);
+  try {
+    const fileName = req.file.originalname.toString();
+    const filePath = req.file.path.toString();
+    var photoUrl = await trainerImage.uploadFile(
+      filePath,
+      req.body.name + '_' + fileName
+    );
+    const url = photoUrl.toString().replace('%20', '_');
+    console.log('update' + url);
+
+    const updated = await trainerService.updateTrainer(
+      req.params.id,
+      req.body,
+      url
+    );
+    console.log('value  ' + updated);
+    if (parseInt(updated)) {
+      const updatedTrainer = await trainerService.getTrainer(req.params.id);
+      return res.status(200).json({ trainer: updatedTrainer });
+    }
+    throw new Error('Trainer not found');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
 }
 
 module.exports = {

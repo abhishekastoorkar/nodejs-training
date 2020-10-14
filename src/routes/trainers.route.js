@@ -12,11 +12,15 @@ router.get('/trainers/:id', trainerController.getTrainer);
 router.post(
   '/trainers',
   upload.single('image'),
-  validate.validateUser,
+  validate(),
   trainerController.createTrainer
 );
 
 router.delete('/trainers/:id', trainerController.deleteTrainer);
 
-router.put('/trainers/:id', trainerController.updateTrainer);
+router.put(
+  '/trainers/:id',
+  upload.single('image'),
+  trainerController.updateTrainer
+);
 module.exports = router;
