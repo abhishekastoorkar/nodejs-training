@@ -7,11 +7,7 @@ const validationOptions = {
 
 const trainerSchema = Joi.object({
   name: Joi.string().required(),
-<<<<<<< HEAD
   email: Joi.string().email().lowercase().required(),
-=======
-  email: Joi.string().email().lowercase().alphanum().required(),
->>>>>>> assignment/master
 });
 
 const validate = () => {
