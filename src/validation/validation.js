@@ -1,21 +1,29 @@
-const { check, validationResult } = require('express-validator');
+const Joi = require('joi');
+const validationOptions = {
+  abortEarly: false,
+  allowUnknown: true,
+  stripUnknown: true,
+};
 
-exports.validateUser = [
-  check('name')
-    .isEmpty()
-    .withMessage('User name can not be empty!')
-    .isLength({ min: 3 })
-    .withMessage('Minimum 3 characters required!'),
+const trainerSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().lowercase().alphanum().required(),
+});
 
-  check('email')
-    .trim()
-    .normalizeEmail()
-    .isEmpty()
-    .withMessage('Invalid email address!'),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(422).json({ errors: errors.msg.array() });
-    next();
-  },
-];
+const validate = () => {
+  return (req, res, next) => {
+    const { error } = trainerSchema.validate(req.body, validationOptions);
+    const valid = error == null;
+
+    if (valid) {
+      next();
+    } else {
+      const { details } = error;
+      const message = details.map((i) => i.message).join(',');
+      console.log('error', message);
+      res.status(422).json({ error: message });
+    }
+  };
+};
+
+module.exports = validate;
