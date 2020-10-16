@@ -5,7 +5,7 @@ const s3 = new AWS.S3({
   accessKeyId: awsKey.accessID,
   secretAccessKey: awsKey.secretKey,
 });
-s3_bucket = 'nodejs-training';
+const s3_bucket = 'nodejs-training';
 
 function uploadFile(filePath, fileName) {
   return new Promise((resolve, reject) => {

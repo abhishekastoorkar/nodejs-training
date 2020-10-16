@@ -47,16 +47,16 @@ async function createTrainer(req, res, next) {
 async function deleteTrainer(req, res, next) {
   try {
     const result = await trainerService.deleteTrainer(req.params.id);
-    console.log(result);
+    console.log('deleet' + result);
     if (result) {
-      res.status(200).send(result);
+      return res.status(200).send(result);
     }
     throw new Error('Trainer not found');
   } catch (error) {
     return res.status(500).send(error.message);
   }
 }
-
+//set "JAVA_HOME=%SONAR_SCANNER_HOME%\jre"
 async function updateTrainer(req, res, next) {
   try {
     const fileName = req.file.originalname.toString();

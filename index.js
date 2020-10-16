@@ -1,6 +1,6 @@
-const db = require("./src/util/index");
-const app = require("./app")();
-const config = require("./src/configs/config");
+const db = require('./src/util/index');
+const app = require('./app')();
+const config = require('./src/configs/config');
 
 const initializeDbAndStartServer = async () => {
   await db.connection.sync();

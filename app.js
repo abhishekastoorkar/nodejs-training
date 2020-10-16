@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const logger = require('morgan');
 const api = require('./src/constants/api');
 const trainerRouter = require('./src/routes/trainers.route');
 
@@ -19,10 +20,10 @@ const handleUnhandledOperation = () => {
 
 module.exports = () => {
   handleUnhandledOperation();
-  console.log('int epp');
+
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-
+  app.use(logger('dev'));
   app.use(api.API, trainerRouter);
 
   app.use('*', (req, res) => res.status(404).json('Page not found'));

@@ -3,7 +3,7 @@ const model = require('../models');
 const trainerModel = model.tbl_trainers;
 
 async function getTrainers() {
-  result = await trainerModel.findAll({
+  const result = await trainerModel.findAll({
     where: {
       is_active: '1',
     },
@@ -12,13 +12,13 @@ async function getTrainers() {
 }
 
 async function getTrainer(id) {
-  result = await trainerModel.findByPk(id);
+  const result = await trainerModel.findByPk(id);
 
   return result;
 }
 
 async function createTrainer(data, photoUrl) {
-  result = await trainerModel.create({
+  const result = await trainerModel.create({
     trainer_name: data.name,
     trainer_email: data.email,
     trainer_phone: data.phone,
@@ -32,27 +32,19 @@ async function createTrainer(data, photoUrl) {
 }
 
 async function deleteTrainer(id) {
-  result = await trainerModel
-    .update(
-      { is_active: '0' },
-      {
-        where: {
-          id: id,
-        },
-      }
-    )
-    .then(() => {
-      trainerModel.findAll({
-        where: {
-          is_active: '1',
-        },
-      });
-    });
+  const result = await trainerModel.update(
+    { is_active: '0' },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
   return result;
 }
 
 async function updateTrainer(id, req, url) {
-  result = await trainerModel.update(
+  const result = await trainerModel.update(
     {
       trainer_name: req.name,
       trainer_email: req.email,

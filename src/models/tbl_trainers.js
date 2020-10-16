@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class tbl_trainers extends Model {
     /**
@@ -12,17 +10,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  tbl_trainers.init({
-    trainer_name: DataTypes.STRING,
-    trainer_email: DataTypes.STRING,
-    trainer_phone: DataTypes.STRING,
-    trainer_address: DataTypes.STRING,
-    trainer_photo_url: DataTypes.STRING,
-    is_active: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'tbl_trainers',
-  });
+  }
+
+  tbl_trainers.init(
+    {
+      trainer_name: DataTypes.STRING,
+      trainer_email: DataTypes.STRING,
+      trainer_phone: DataTypes.STRING,
+      trainer_address: DataTypes.STRING,
+      trainer_photo_url: DataTypes.STRING,
+      is_active: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: 'tbl_trainers',
+    }
+  );
   return tbl_trainers;
 };

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+    <file path="C:\Users\Abhishek.astoorkar\Desktop\node-assignment\assignment-1\tests\routes.test.js">
+        <testCase name="Trainer API should fetch all trainers" duration="88"/>
+        <testCase name="Trainer API should show one trainer" duration="9"/>
+        <testCase name="Trainer API should show one trainer information" duration="8"/>
+        <testCase name="Trainer API should create a new trainer" duration="1698"/>
+        <testCase name="Trainer API should update a trainer" duration="1604"/>
+        <testCase name="Trainer API should delete a trainer" duration="13"/>
+        <testCase name="Trainer API should respond with status code 404 if resource is not found" duration="5"/>
+        <testCase name="Trainer API should respond with status code 404 if improper url" duration="3"/>
+    </file>
+</testExecutions>
