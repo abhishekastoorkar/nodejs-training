@@ -2,41 +2,41 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('tbl_trainers', {
-      id: {
+      trainerId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      trainer_name: {
-        type: Sequelize.STRING
+      trainerName: {
+        type: Sequelize.STRING,
       },
-      trainer_email: {
-        type: Sequelize.STRING
+      trainerEmail: {
+        type: Sequelize.STRING,
       },
-      trainer_phone: {
-        type: Sequelize.STRING
+      trainerPhone: {
+        type: Sequelize.STRING,
       },
-      trainer_address: {
-        type: Sequelize.STRING
+      trainerAddress: {
+        type: Sequelize.STRING,
       },
-      trainer_photo_url: {
-        type: Sequelize.STRING
+      trainerPhoto: {
+        type: Sequelize.STRING,
       },
-      is_active: {
-        type: Sequelize.BOOLEAN
+      status: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('tbl_trainers');
-  }
+  },
 };

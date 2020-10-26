@@ -1,11 +1,13 @@
 const { date } = require('joi');
 const model = require('../models');
 const trainerModel = model.tbl_trainers;
+const topicModel = model.tbl_topics;
+const trainTopicModel = model.tbl_trainers_topics;
 
 async function getTrainers() {
   const result = await trainerModel.findAll({
     where: {
-      is_active: '1',
+      status: '1',
     },
   });
   return result;
@@ -19,12 +21,12 @@ async function getTrainer(id) {
 
 async function createTrainer(data, photoUrl) {
   const result = await trainerModel.create({
-    trainer_name: data.name,
-    trainer_email: data.email,
-    trainer_phone: data.phone,
-    trainer_address: data.address,
-    trainer_photo_url: photoUrl,
-    is_active: data.status,
+    trainerName: data.name,
+    trainerEmail: data.email,
+    trainerPhone: data.phone,
+    trainerAddress: data.address,
+    trainerPhoto: photoUrl,
+    status: data.status,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -46,12 +48,12 @@ async function deleteTrainer(id) {
 async function updateTrainer(id, req, url) {
   const result = await trainerModel.update(
     {
-      trainer_name: req.name,
-      trainer_email: req.email,
-      trainer_phone: req.phone,
-      trainer_address: req.address,
-      trainer_photo_url: url,
-      is_active: req.status,
+      trainerName: req.name,
+      trainerEmail: req.email,
+      trainerPhone: req.phone,
+      trainerAddress: req.address,
+      trainerPhoto: url,
+      status: req.status,
     },
     {
       where: {
@@ -62,10 +64,25 @@ async function updateTrainer(id, req, url) {
   return result;
 }
 
+async function getTrainerByTopic(id) {
+  const result = await trainerModel.findAll({
+    include: [
+      {
+        model: trainTopicModel,
+        where: { topicId: id },
+        attributes: [],
+      },
+    ],
+  });
+  console.log(result);
+  return result;
+}
+
 module.exports = {
   getTrainer: getTrainer,
   getTrainers: getTrainers,
   createTrainer: createTrainer,
   deleteTrainer: deleteTrainer,
   updateTrainer: updateTrainer,
+  getTrainerByTopic: getTrainerByTopic,
 };

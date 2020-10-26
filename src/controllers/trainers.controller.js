@@ -56,7 +56,7 @@ async function deleteTrainer(req, res, next) {
     return res.status(500).send(error.message);
   }
 }
-//set "JAVA_HOME=%SONAR_SCANNER_HOME%\jre"
+
 async function updateTrainer(req, res, next) {
   try {
     const fileName = req.file.originalname.toString();
@@ -81,6 +81,17 @@ async function updateTrainer(req, res, next) {
     return res.status(500).send(error.message);
   }
 }
+async function getTrainerByTopic(req, res, next) {
+  try {
+    const result = await trainerService.getTrainerByTopic(req.params.id);
+    if (result) {
+      return res.status(200).json({ trainers: result });
+    }
+    throw new Error('trainers not available');
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+}
 
 module.exports = {
   getTrainer: getTrainer,
@@ -88,4 +99,5 @@ module.exports = {
   createTrainer: createTrainer,
   deleteTrainer: deleteTrainer,
   updateTrainer: updateTrainer,
+  getTrainerByTopic: getTrainerByTopic,
 };

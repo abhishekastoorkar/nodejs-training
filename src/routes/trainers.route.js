@@ -5,22 +5,20 @@ const validate = require('../validation/validation');
 
 const router = express.Router();
 
-router.get('/trainers', trainerController.getTrainers);
+router.get('/', trainerController.getTrainers);
 
-router.get('/trainers/:id', trainerController.getTrainer);
+router.get('/:id', trainerController.getTrainer);
 
 router.post(
-  '/trainers',
+  '/',
   upload.single('image'),
   validate(),
   trainerController.createTrainer
 );
 
-router.delete('/trainers/:id', trainerController.deleteTrainer);
+router.delete('/:id', trainerController.deleteTrainer);
 
-router.put(
-  '/trainers/:id',
-  upload.single('image'),
-  trainerController.updateTrainer
-);
+router.put('/:id', upload.single('image'), trainerController.updateTrainer);
+
+router.get('/topic/:id', trainerController.getTrainerByTopic);
 module.exports = router;

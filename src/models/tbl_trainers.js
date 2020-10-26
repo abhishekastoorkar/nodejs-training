@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, INTEGER } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class tbl_trainers extends Model {
     /**
@@ -8,18 +8,24 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.hasMany(models.tbl_trainers_topics, {
+        foreignKey: 'trainerId',
+      });
     }
   }
-
   tbl_trainers.init(
     {
-      trainer_name: DataTypes.STRING,
-      trainer_email: DataTypes.STRING,
-      trainer_phone: DataTypes.STRING,
-      trainer_address: DataTypes.STRING,
-      trainer_photo_url: DataTypes.STRING,
-      is_active: DataTypes.BOOLEAN,
+      trainerId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      trainerName: DataTypes.STRING,
+      trainerEmail: DataTypes.STRING,
+      trainerPhone: DataTypes.STRING,
+      trainerAddress: DataTypes.STRING,
+      trainerPhoto: DataTypes.STRING,
+      status: DataTypes.BOOLEAN,
     },
     {
       sequelize,

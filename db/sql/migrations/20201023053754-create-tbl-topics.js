@@ -2,29 +2,30 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('tbl_topics', {
-      id: {
+      topicId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      topic_name: {
-        type: Sequelize.STRING
+
+      topicName: {
+        type: Sequelize.STRING,
       },
-      is_active: {
-        type: Sequelize.BOOLEAN
+      status: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('tbl_topics');
-  }
+  },
 };

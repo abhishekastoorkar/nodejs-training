@@ -24,7 +24,7 @@ module.exports = () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(logger('dev'));
-  app.use(api.API, trainerRouter);
+  app.use(api.TRAINERS, trainerRouter);
 
   app.use('*', (req, res) => res.status(404).json('Page not found'));
 
