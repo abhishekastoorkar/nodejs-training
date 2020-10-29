@@ -92,6 +92,17 @@ async function getTrainerByTopic(req, res, next) {
     return res.status(400).send(error.message);
   }
 }
+async function getTrainerBySchedule(req, res, next) {
+  try {
+    const result = await trainerService.getTrainerBySchedule(req);
+    if (result) {
+      return res.status(200).json({ trainers: result });
+    }
+    throw new Error('trainers not available');
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+}
 
 module.exports = {
   getTrainer: getTrainer,
@@ -100,4 +111,5 @@ module.exports = {
   deleteTrainer: deleteTrainer,
   updateTrainer: updateTrainer,
   getTrainerByTopic: getTrainerByTopic,
+  getTrainerBySchedule: getTrainerBySchedule,
 };

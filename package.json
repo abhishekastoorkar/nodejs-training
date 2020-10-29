@@ -13,6 +13,7 @@
   "author": "abhishek astoorkar",
   "license": "ISC",
   "dependencies": {
+    "@types/sequelize": "^4.28.9",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -35,16 +36,20 @@
     "testEnvironment": "node",
     "collectCoverage": true,
     "coverageReporters": [
-      "html", "json", "text", "lcov", "clover" 
+      "html",
+      "json",
+      "text",
+      "lcov",
+      "clover"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
-    "testResultsProcessor": "jest-sonar-reporter" 
+    "testResultsProcessor": "jest-sonar-reporter"
   },
-  "jestSonar": {    
-     "reportPath": "coverage",     
-      "reportFile": "test-report.xml",    
-     "indent": 4   
-    }
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-report.xml",
+    "indent": 4
+  }
 }

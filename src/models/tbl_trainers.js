@@ -1,5 +1,6 @@
 'use strict';
 const { Model, INTEGER } = require('sequelize');
+const trainerService = require('../services/trainer.service');
 module.exports = (sequelize, DataTypes) => {
   class tbl_trainers extends Model {
     /**
@@ -9,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.tbl_trainers_topics, {
+        foreignKey: 'trainerId',
+      });
+      this.hasMany(models.tbl_trainer_schedule, {
+        foreignKey: 'trainerId',
+      });
+      this.hasMany(models.tbl_training_programs, {
         foreignKey: 'trainerId',
       });
     }

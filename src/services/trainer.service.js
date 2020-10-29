@@ -1,8 +1,10 @@
-const { date } = require('joi');
+const moment = require('moment');
 const model = require('../models');
+const { Op } = require('sequelize');
 const trainerModel = model.tbl_trainers;
 const topicModel = model.tbl_topics;
 const trainTopicModel = model.tbl_trainers_topics;
+const trainerScheduleModel = model.tbl_trainer_schedule;
 
 async function getTrainers() {
   const result = await trainerModel.findAll({
@@ -20,16 +22,30 @@ async function getTrainer(id) {
 }
 
 async function createTrainer(data, photoUrl) {
-  const result = await trainerModel.create({
-    trainerName: data.name,
-    trainerEmail: data.email,
-    trainerPhone: data.phone,
-    trainerAddress: data.address,
-    trainerPhoto: photoUrl,
-    status: data.status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  console.log(data);
+  const result = await trainerModel.create(
+    {
+      trainerName: data.name,
+      trainerEmail: data.email,
+      trainerPhone: data.phone,
+      trainerAddress: data.address,
+      trainerPhoto: photoUrl,
+      status: data.status,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      tbl_trainers_topics: [
+        {
+          topicId: data.topicId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+    },
+    {
+      include: [model.tbl_trainers_topics],
+    }
+  );
+
   return result;
 }
 
@@ -74,7 +90,32 @@ async function getTrainerByTopic(id) {
       },
     ],
   });
-  console.log(result);
+
+  return result;
+}
+
+async function getTrainerBySchedule(data) {
+  const result = await trainerModel.findAll({
+    include: [
+      {
+        model: trainerScheduleModel,
+        where: {
+          endDate: {
+            [Op.lt]: moment(new Date(data.body.startDate)).format(
+              'YYYY-MM-DD HH:mm'
+            ),
+          },
+        },
+        attributes: [],
+      },
+      {
+        model: trainTopicModel,
+        where: { topicId: data.params.id },
+        attributes: [],
+      },
+    ],
+  });
+
   return result;
 }
 
@@ -85,4 +126,5 @@ module.exports = {
   deleteTrainer: deleteTrainer,
   updateTrainer: updateTrainer,
   getTrainerByTopic: getTrainerByTopic,
+  getTrainerBySchedule: getTrainerBySchedule,
 };

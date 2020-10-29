@@ -20,5 +20,8 @@ router.delete('/:id', trainerController.deleteTrainer);
 
 router.put('/:id', upload.single('image'), trainerController.updateTrainer);
 
-router.get('/topic/:id', trainerController.getTrainerByTopic);
+router.get('/topics/:id', trainerController.getTrainerByTopic);
+
+router.post('/schedules/:id', trainerController.getTrainerBySchedule);
+
 module.exports = router;
