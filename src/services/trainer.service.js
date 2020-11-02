@@ -1,6 +1,7 @@
 const moment = require('moment');
 const model = require('../models');
 const { Op } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const trainerModel = model.tbl_trainers;
 const topicModel = model.tbl_topics;
 const trainTopicModel = model.tbl_trainers_topics;
@@ -94,28 +95,89 @@ async function getTrainerByTopic(id) {
   return result;
 }
 
-async function getTrainerBySchedule(data) {
+async function getTrainerBySchedule(id, startDate) {
   const result = await trainerModel.findAll({
     include: [
       {
         model: trainerScheduleModel,
         where: {
           endDate: {
-            [Op.lt]: moment(new Date(data.body.startDate)).format(
-              'YYYY-MM-DD HH:mm'
-            ),
+            [Op.lt]: moment(new Date(startDate)).format('YYYY-MM-DD HH:mm'),
           },
         },
         attributes: [],
       },
       {
         model: trainTopicModel,
-        where: { topicId: data.params.id },
+        where: { topicId: id },
         attributes: [],
       },
     ],
   });
 
+  return result;
+}
+
+async function getTrainingStatics(startDate, endDate) {
+  const result = [];
+  const conducted = await trainerScheduleModel.findAll({
+    group: 'tbl_trainer_schedule.trainerId',
+
+    where: {
+      startDate: {
+        [Op.gt]: startDate,
+      },
+      endDate: {
+        [Op.lt]: endDate,
+      },
+    },
+    attributes: [
+      'tbl_trainer_schedule.trainerId',
+      [
+        Sequelize.fn('COUNT', Sequelize.col('tbl_trainer_schedule.startDate')),
+        'conducted',
+      ],
+    ],
+    include: [
+      {
+        model: trainerModel,
+        attributes: [],
+        include: [],
+      },
+    ],
+
+    raw: true,
+  });
+  const scheduled = await trainerScheduleModel.findAll({
+    group: 'tbl_trainer_schedule.trainerId',
+
+    where: {
+      startDate: {
+        [Op.gt]: startDate,
+      },
+      endDate: {
+        [Op.gt]: endDate,
+      },
+    },
+    attributes: [
+      'tbl_trainer_schedule.trainerId',
+      [
+        Sequelize.fn('COUNT', Sequelize.col('tbl_trainer_schedule.startDate')),
+        'scheduled',
+      ],
+    ],
+    include: [
+      {
+        model: trainerModel,
+        attributes: [],
+        include: [],
+      },
+    ],
+
+    raw: true,
+  });
+
+  result.push({ conducted }, { scheduled });
   return result;
 }
 
@@ -127,4 +189,5 @@ module.exports = {
   updateTrainer: updateTrainer,
   getTrainerByTopic: getTrainerByTopic,
   getTrainerBySchedule: getTrainerBySchedule,
+  getTrainingStatics: getTrainingStatics,
 };

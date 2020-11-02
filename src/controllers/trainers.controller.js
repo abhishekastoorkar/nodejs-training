@@ -93,14 +93,28 @@ async function getTrainerByTopic(req, res, next) {
   }
 }
 async function getTrainerBySchedule(req, res, next) {
+  const { topicId, startDate } = req.query;
   try {
-    const result = await trainerService.getTrainerBySchedule(req);
+    const result = await trainerService.getTrainerBySchedule(
+      topicId,
+      startDate
+    );
     if (result) {
       return res.status(200).json({ trainers: result });
     }
     throw new Error('trainers not available');
   } catch (error) {
     return res.status(400).send(error.message);
+  }
+}
+
+async function getTrainingStatics(req, res, next) {
+  const { startDate, endDate } = req.query;
+  try {
+    const result = await trainerService.getTrainingStatics(startDate, endDate);
+    return res.status(200).json({ result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 }
 
@@ -112,4 +126,5 @@ module.exports = {
   updateTrainer: updateTrainer,
   getTrainerByTopic: getTrainerByTopic,
   getTrainerBySchedule: getTrainerBySchedule,
+  getTrainingStatics: getTrainingStatics,
 };

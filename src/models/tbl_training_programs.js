@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.tbl_trainers, {
         foreignKey: 'trainerId',
       });
-      this.hasMany(models.tbl_trainer_schedule, {});
     }
   }
   tbl_training_programs.init(
