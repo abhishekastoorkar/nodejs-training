@@ -2,10 +2,7 @@ const model = require('../models');
 const { Op } = require('sequelize');
 const moment = require('moment');
 const date = moment().format('YYYY-MM-DD HH:mm');
-
 const trainerModel = model.tbl_trainers;
-const topicModel = model.tbl_topics;
-const trainTopicModel = model.tbl_trainers_topics;
 const trainingProgramModel = model.tbl_training_programs;
 const trainerScheduleModel = model.tbl_trainer_schedule;
 const sendMail = require('../util/sendEmail');
@@ -24,7 +21,7 @@ async function createTrainingProgram(data) {
       updatedDate: new Date(),
     })
     .then(() => {
-      const trainerSchedule = trainerScheduleModel.create({
+      trainerScheduleModel.create({
         trainerId: data.trainerId,
         startDate: data.startDate,
         endDate: data.endDate,

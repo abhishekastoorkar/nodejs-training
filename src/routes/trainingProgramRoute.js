@@ -1,6 +1,5 @@
 const express = require('express');
-const validate = require('../validation/validation');
-const trainingProgramController = require('../controllers/training.program.controller');
+const trainingProgramController = require('../controllers/trainingProgramController');
 
 const router = express.Router();
 

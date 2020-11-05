@@ -1,7 +1,8 @@
-const trainerService = require('../services/trainer.service');
-const trainerImage = require('../middleware/trainer.image');
+const trainerService = require('../services/trainerService');
+const trainerImage = require('../middleware/imageUpload');
+const moment = require('moment');
 
-async function getTrainers(req, res, next) {
+async function getTrainers(req, res) {
   try {
     const trainers = await trainerService.getTrainers();
     return res.status(200).json({ trainers });
@@ -10,7 +11,7 @@ async function getTrainers(req, res, next) {
   }
 }
 
-async function getTrainer(req, res, next) {
+async function getTrainer(req, res) {
   try {
     const id = req.params.id;
     const trainer = await trainerService.getTrainer(id);
@@ -25,7 +26,7 @@ async function getTrainer(req, res, next) {
   }
 }
 
-async function createTrainer(req, res, next) {
+async function createTrainer(req, res) {
   try {
     const fileName = req.file.originalname.toString();
     const filePath = req.file.path.toString();
@@ -44,7 +45,7 @@ async function createTrainer(req, res, next) {
   }
 }
 
-async function deleteTrainer(req, res, next) {
+async function deleteTrainer(req, res) {
   try {
     const result = await trainerService.deleteTrainer(req.params.id);
     console.log('deleet' + result);
@@ -57,7 +58,7 @@ async function deleteTrainer(req, res, next) {
   }
 }
 
-async function updateTrainer(req, res, next) {
+async function updateTrainer(req, res) {
   try {
     const fileName = req.file.originalname.toString();
     const filePath = req.file.path.toString();
@@ -81,7 +82,7 @@ async function updateTrainer(req, res, next) {
     return res.status(500).send(error.message);
   }
 }
-async function getTrainerByTopic(req, res, next) {
+async function getTrainerByTopic(req, res) {
   try {
     const result = await trainerService.getTrainerByTopic(req.params.id);
     if (result) {
@@ -92,7 +93,7 @@ async function getTrainerByTopic(req, res, next) {
     return res.status(400).send(error.message);
   }
 }
-async function getTrainerBySchedule(req, res, next) {
+async function getTrainerBySchedule(req, res) {
   const { topicId, startDate } = req.query;
   try {
     const result = await trainerService.getTrainerBySchedule(
@@ -108,10 +109,14 @@ async function getTrainerBySchedule(req, res, next) {
   }
 }
 
-async function getTrainingStatics(req, res, next) {
+async function getTrainingStatics(req, res) {
   const { startDate, endDate } = req.query;
+  const firstDate = moment(new Date(startDate)).format('YYYY-MM-DD HH:mm');
+  const lastDate = moment(new Date(endDate)).format('YYYY-MM-DD HH:mm');
+
   try {
-    const result = await trainerService.getTrainingStatics(startDate, endDate);
+    const result = await trainerService.getTrainingStatics(firstDate, lastDate);
+    console.log('contro' + result);
     return res.status(200).json({ result });
   } catch (error) {
     return res.status(500).json({ error: error.message });

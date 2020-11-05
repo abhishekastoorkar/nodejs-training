@@ -1,13 +1,7 @@
 'use strict';
-const { Model, INTEGER } = require('sequelize');
-const trainerService = require('../services/trainer.service');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class tbl_trainers extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       this.hasMany(models.tbl_trainers_topics, {
         foreignKey: 'trainerId',

@@ -1,14 +1,10 @@
-const trainingProgramService = require('../services/training.program.service');
+const trainingProgramService = require('../services/trainingProgramService');
 
 async function createTrainingProgram(req, res) {
   console.dir(req.body);
   try {
-    const program = await trainingProgramService.createTrainingProgram(
-      req.body
-    );
-    return res.status(201).json({
-      program,
-    });
+    await trainingProgramService.createTrainingProgram(req.body);
+    return res.status(201).json('training program created');
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

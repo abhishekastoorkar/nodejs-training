@@ -3,7 +3,6 @@ const model = require('../models');
 const { Op } = require('sequelize');
 const { Sequelize } = require('sequelize');
 const trainerModel = model.tbl_trainers;
-const topicModel = model.tbl_topics;
 const trainTopicModel = model.tbl_trainers_topics;
 const trainerScheduleModel = model.tbl_trainer_schedule;
 
@@ -178,6 +177,7 @@ async function getTrainingStatics(startDate, endDate) {
   });
 
   result.push({ conducted }, { scheduled });
+  console.log('result' + conducted);
   return result;
 }
 

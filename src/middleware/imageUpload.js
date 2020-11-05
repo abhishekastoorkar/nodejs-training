@@ -8,7 +8,7 @@ const s3 = new AWS.S3({
 const s3_bucket = 'nodejs-training';
 
 function uploadFile(filePath, fileName) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const fileContent = fs.readFileSync(filePath);
     let params = { Body: fileContent, Bucket: s3_bucket, Key: fileName };
 
@@ -21,7 +21,7 @@ function uploadFile(filePath, fileName) {
       }
     });
   }).catch((err) => {
-    reject(err);
+    return err;
   });
 }
 
