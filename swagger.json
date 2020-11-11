@@ -1,0 +1,131 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trainer manager API",
+    "description": "An API that allows user to manage trainers and training programs",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Abhishek Astoorkar",
+      "email": "abhishek.astoorkar@hppiestminds.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1.0/",
+      "description": "Main Development server"
+    }
+  ],
+  "paths": {
+    "/trainers": {
+      "get": {
+        "summary": "Returns a list of all trainers.",
+        "description": "this API will return all available trainers details",
+        "responses": {
+          "200": {
+            "description": "A JSON array of trainers details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trainer"
+                  }
+                },
+                "example": [
+                  {
+                    "trainerId": "1",
+                    "trainerName": "Steve Jobs",
+                    "trainerEmail": "stevejobs@apple.com",
+                    "trainerPhone": "020-2239735687",
+                    "trainerAddress": "California USA",
+                    "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                    "status": "true"
+                  },
+                  {
+                    "trainerId": "2",
+                    "trainerName": "Donald Trump",
+                    "trainerEmail": "donaldtrump@info.com",
+                    "trainerPhone": "020-224545457",
+                    "trainerAddress": "Washington DC USA",
+                    "trainerPhoto": "https:aws.s3.donaldtrump_image@aws.com",
+                    "status": "true"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trainers/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "The trainer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A json object of trainer details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Trainer"
+                  }
+                },
+                "example": {
+                  "trainerId": "1",
+                  "trainerName": "Steve Jobs",
+                  "trainerEmail": "stevejobs@apple.com",
+                  "trainerPhone": "020-2239735687",
+                  "trainerAddress": "California USA",
+                  "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                  "status": "true"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Trainer": {
+        "description": "A JSON array of trainers",
+        "properties": {
+          "trainerId": {
+            "type": "integer"
+          },
+          "trainerName": {
+            "type": "string"
+          },
+          "trainerEmail": {
+            "type": "string"
+          },
+          "trainerPhone": {
+            "type": "string"
+          },
+          "trainerAddress": {
+            "type": "string"
+          },
+          "trainerPhoto": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
