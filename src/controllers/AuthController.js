@@ -30,7 +30,6 @@ class AuthController {
     const password = req.body.password;
     try {
       const result = await objAuthService.signIn(userName, password);
-      console.log(result);
       res.send(result);
     } catch (err) {
       res.status(500).send(err);

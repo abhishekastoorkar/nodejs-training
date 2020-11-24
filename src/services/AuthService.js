@@ -9,6 +9,7 @@ class AuthService {
       ClientId: config.cognito.clientId,
     };
     //const poolRegion = config.cognito.region
+
     this.userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
   }
 
@@ -76,20 +77,21 @@ class AuthService {
       const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
         authenticationData
       );
-
+      // console.log(authenticationDetails);
       const userData = {
         Username: username,
         Pool: this.userPool,
       };
 
-      const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+      var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
       cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: (result) => {
-          const accessToken = result.getAccessToken().getJwtToken();
+        onSuccess: function (result) {
+          var accessToken = result.getIdToken().getJwtToken();
           resolve(accessToken);
         },
-        onFailure: (err) => {
+
+        onFailure: function (err) {
           reject(err);
         },
       });

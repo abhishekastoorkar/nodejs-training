@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const logger = require('morgan');
 const api = require('./src/constants/api');
 const trainerRoute = require('./src/routes/trainersRoute');
 const trainingProgramRoute = require('./src/routes/trainingProgramRoute');
 const authRoute = require('./src/routes/congnitoRoutes');
+const authApi = require('./src/middleware/authService');
 
 const app = express();
 
@@ -26,8 +28,8 @@ module.exports = () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(logger('dev'));
-
-  app.use(api.TRAINERS, trainerRoute);
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use(api.TRAINERS, authApi.Validate, trainerRoute);
   app.use(api.TRAINING_PROGRAM, trainingProgramRoute);
   app.use(api.AUTHENTICATE, authRoute);
 

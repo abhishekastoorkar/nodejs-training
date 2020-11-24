@@ -79,7 +79,12 @@
                 "schema": {
                   "type": "object",
                   "items": {
-                    "$ref": "#/components/schemas/Trainer"
+                    "name": "Steve Jobs",
+                    "email": "stevejobs@apple.com",
+                    "phone": "020-2239735687",
+                    "address": "California USA",
+                    "photo": "https:aws.s3.stevejobs_image@aws.com",
+                    "status": "true"
                   }
                 },
                 "example": {
@@ -93,6 +98,26 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/trainers/": {
+      "post": {
+        "description": "Create trainer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Trainer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "New trainer created"
           }
         }
       }
