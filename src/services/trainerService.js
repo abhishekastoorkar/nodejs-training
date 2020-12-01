@@ -5,6 +5,7 @@ const { Sequelize } = require('sequelize');
 const trainerModel = model.tbl_trainers;
 const trainTopicModel = model.tbl_trainers_topics;
 const trainerScheduleModel = model.tbl_trainer_schedule;
+const date = moment().format('YYYY-MM-DD HH:mm');
 
 async function getTrainers() {
   const result = await trainerModel.findAll({
@@ -17,12 +18,10 @@ async function getTrainers() {
 
 async function getTrainer(id) {
   const result = await trainerModel.findByPk(id);
-
   return result;
 }
 
 async function createTrainer(data, photoUrl) {
-  console.log(data);
   const result = await trainerModel.create(
     {
       trainerName: data.name,
@@ -51,11 +50,12 @@ async function createTrainer(data, photoUrl) {
 
 async function deleteTrainer(id) {
   const result = await trainerModel.update(
-    { is_active: '0' },
+    { status: '0' },
     {
       where: {
-        id: id,
+        trainerId: id,
       },
+      returning: true,
     }
   );
   return result;
@@ -124,10 +124,10 @@ async function getTrainingStatics(startDate, endDate) {
 
     where: {
       startDate: {
-        [Op.gt]: startDate,
+        [Op.gte]: startDate,
       },
       endDate: {
-        [Op.lt]: endDate,
+        [Op.lte]: endDate,
       },
     },
     attributes: [
@@ -177,7 +177,7 @@ async function getTrainingStatics(startDate, endDate) {
   });
 
   result.push({ conducted }, { scheduled });
-  console.log('result' + conducted);
+
   return result;
 }
 

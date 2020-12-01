@@ -3,7 +3,7 @@ const trainerController = require('../controllers/trainersController');
 const upload = require('../middleware/multer');
 const validate = require('../validation/validation');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 router.get('/training-statics', trainerController.getTrainingStatics);
 
 router.get('/schedules', trainerController.getTrainerBySchedule);

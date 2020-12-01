@@ -29,7 +29,7 @@ async function createTrainingProgram(data) {
         updatedDate: new Date(),
       });
     });
-  console.log('res' + result);
+
   sendMail.sendEmail(
     data.trainerId,
     data.topicName,

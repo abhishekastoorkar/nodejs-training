@@ -4,6 +4,7 @@ const request = require('request');
 
 exports.Validate = function (req, res, next) {
   var token = req.header('Authorization');
+  console.log(token);
   request(
     {
       url:

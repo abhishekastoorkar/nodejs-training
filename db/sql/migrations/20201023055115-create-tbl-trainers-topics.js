@@ -10,9 +10,19 @@ module.exports = {
       },
       topicId: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'tbl_topics',
+          key: 'topicId',
+          as: 'topicId',
+        },
       },
       trainerId: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'tbl_trainers',
+          key: 'trainerId',
+          as: 'trainerId',
+        },
       },
       createdAt: {
         allowNull: false,

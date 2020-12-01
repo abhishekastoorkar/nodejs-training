@@ -19,6 +19,11 @@ module.exports = {
       },
       trainerId: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'tbl_trainers',
+          key: 'trainerId',
+          as: 'trainerId',
+        },
       },
       registrationStartDate: {
         type: Sequelize.DATE,

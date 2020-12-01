@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('tbl_trainers_topics', [
       {
         trainerId: '1',
-        topicId: '2',
+        topicId: '1',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -16,13 +16,13 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        trainerId: '4',
+        trainerId: '5',
         topicId: '3',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        trainerId: '3',
+        trainerId: '4',
         topicId: '4',
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -47,7 +47,13 @@ module.exports = {
       },
       {
         trainerId: '1',
-        topicId: '5',
+        topicId: '6',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        trainerId: '4',
+        topicId: '7',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

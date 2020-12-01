@@ -19,7 +19,18 @@
     "/trainers": {
       "get": {
         "summary": "Returns a list of all trainers.",
+        "tags": [
+          "Trainers"
+        ],
         "description": "this API will return all available trainers details",
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "A JSON array of trainers details",
@@ -31,26 +42,92 @@
                     "$ref": "#/components/schemas/Trainer"
                   }
                 },
-                "example": [
-                  {
-                    "trainerId": "1",
-                    "trainerName": "Steve Jobs",
-                    "trainerEmail": "stevejobs@apple.com",
-                    "trainerPhone": "020-2239735687",
-                    "trainerAddress": "California USA",
-                    "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
-                    "status": "true"
+                "example": {
+                  "trainers": [
+                    {
+                      "trainerId": 2,
+                      "trainerName": "donald trump",
+                      "trainerEmail": "donaldtrump@whitehousemail.com",
+                      "trainerPhone": "020-23243242",
+                      "trainerAddress": "Washington DC USA",
+                      "trainerPhoto": "https:aws.s3.donaldtrumpimage@aws.com",
+                      "status": true,
+                      "createdAt": "2020-10-24T06:44:28.000Z",
+                      "updatedAt": "2020-10-24T06:44:28.000Z"
+                    },
+                    {
+                      "trainerId": 3,
+                      "trainerName": "steve jobs",
+                      "trainerEmail": "astoorkar.abhishek@gmail.com",
+                      "trainerPhone": "020-2232434",
+                      "trainerAddress": "California USA",
+                      "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                      "status": true,
+                      "createdAt": "2020-10-24T06:44:28.000Z",
+                      "updatedAt": "2020-10-24T06:44:28.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "create a new trainer",
+        "tags": [
+          "Trainers"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
                   },
-                  {
-                    "trainerId": "2",
-                    "trainerName": "Donald Trump",
-                    "trainerEmail": "donaldtrump@info.com",
-                    "trainerPhone": "020-224545457",
-                    "trainerAddress": "Washington DC USA",
-                    "trainerPhoto": "https:aws.s3.donaldtrump_image@aws.com",
-                    "status": "true"
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  },
+                  "topicId": {
+                    "type": "integer"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "new  trainer created successfully"
+                }
               }
             }
           }
@@ -59,6 +136,18 @@
     },
     "/trainers/{id}": {
       "get": {
+        "summary": "Return a trainer details depend upon trainer id",
+        "tags": [
+          "Trainers"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -88,13 +177,114 @@
                   }
                 },
                 "example": {
-                  "trainerId": "1",
-                  "trainerName": "Steve Jobs",
-                  "trainerEmail": "stevejobs@apple.com",
-                  "trainerPhone": "020-2239735687",
-                  "trainerAddress": "California USA",
-                  "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
-                  "status": "true"
+                  "trainer": {
+                    "trainerId": "1",
+                    "trainerName": "Steve Jobs",
+                    "trainerEmail": "stevejobs@apple.com",
+                    "trainerPhone": "020-2239735687",
+                    "trainerAddress": "California USA",
+                    "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                    "status": "true"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a trainer by id",
+        "tags": [
+          "Trainers"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "The Trainer id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete was successful."
+          },
+          "404": {
+            "description": "trainer not found."
+          }
+        }
+      }
+    },
+    "/trainers/topics/{id}": {
+      "get": {
+        "summary": "Return a trainer details depend upon topic id. all the trainers who teach specific topic",
+        "tags": [
+          "Trainers"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "The topic ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A json object of trainer details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "trainers": [
+                    {
+                      "trainerId": 2,
+                      "trainerName": "donald trump",
+                      "trainerEmail": "donaldtrump@whitehousemail.com",
+                      "trainerPhone": "020-23243242",
+                      "trainerAddress": "Washington DC USA",
+                      "trainerPhoto": "https:aws.s3.donaldtrumpimage@aws.com",
+                      "status": true,
+                      "createdAt": "2020-10-24T06:44:28.000Z",
+                      "updatedAt": "2020-10-24T06:44:28.000Z"
+                    },
+                    {
+                      "trainerId": 3,
+                      "trainerName": "steve jobs",
+                      "trainerEmail": "astoorkar.abhishek@gmail.com",
+                      "trainerPhone": "020-2232434",
+                      "trainerAddress": "California USA",
+                      "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                      "status": true,
+                      "createdAt": "2020-10-24T06:44:28.000Z",
+                      "updatedAt": "2020-10-24T06:44:28.000Z"
+                    }
+                  ]
                 }
               }
             }
@@ -102,22 +292,253 @@
         }
       }
     },
-    "/trainers/": {
-      "post": {
-        "description": "Create trainer",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Trainer"
+    "/trainers/training-statics": {
+      "get": {
+        "summary": "shows training statistics of each trainer such as number of trainings conducted and scheduled in between specific date",
+        "tags": [
+          "Trainers"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "startDate",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The start date"
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "description": "The end date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A json object of training statistics details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "result": [
+                    {
+                      "conducted": [
+                        {
+                          "trainerId": 1,
+                          "conducted": 1
+                        },
+                        {
+                          "trainerId": 4,
+                          "conducted": 2
+                        }
+                      ]
+                    },
+                    {
+                      "scheduled": [
+                        {
+                          "trainerId": 3,
+                          "scheduled": 1
+                        },
+                        {
+                          "trainerId": 4,
+                          "scheduled": 1
+                        }
+                      ]
+                    }
+                  ]
+                }
               }
             }
-          },
-          "required": true
+          }
+        }
+      }
+    },
+    "/training-program": {
+      "get": {
+        "summary": "Returns a list of all trainig programs. also it will show classification as completed, ongoing, upcoming trainings",
+        "tags": [
+          "Training-program"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of training-program details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                },
+                "example": {
+                  "programs": [
+                    {
+                      "completedTrainings": [
+                        {
+                          "trainingId": 15,
+                          "startDate": "2020-11-14T18:30:00.000Z",
+                          "endDate": "2020-11-24T18:30:00.000Z",
+                          "topicName": "Python",
+                          "trainerId": 3,
+                          "registrationStartDate": "2020-11-04T18:30:00.000Z",
+                          "registrationEndDate": "2020-11-09T18:30:00.000Z",
+                          "maxAttendees": 30,
+                          "createdAt": "2020-10-29T06:22:01.000Z",
+                          "updatedAt": "2020-10-29T06:22:01.000Z",
+                          "tbl_trainer": {
+                            "trainerId": 3,
+                            "trainerName": "steve jobs",
+                            "trainerEmail": "astoorkar.abhishek@gmail.com",
+                            "trainerPhone": "020-2232434",
+                            "trainerAddress": "California USA",
+                            "trainerPhoto": "https:aws.s3.stevejobs_image@aws.com",
+                            "status": true,
+                            "createdAt": "2020-10-24T06:44:28.000Z",
+                            "updatedAt": "2020-10-24T06:44:28.000Z"
+                          }
+                        },
+                        {
+                          "trainingId": 16,
+                          "startDate": "2020-10-09T18:30:00.000Z",
+                          "endDate": "2020-10-24T18:30:00.000Z",
+                          "topicName": "Angular",
+                          "trainerId": 1,
+                          "registrationStartDate": "2020-09-30T18:30:00.000Z",
+                          "registrationEndDate": "2020-10-06T18:30:00.000Z",
+                          "maxAttendees": 30,
+                          "createdAt": "2020-10-29T08:18:21.000Z",
+                          "updatedAt": "2020-10-29T08:18:21.000Z",
+                          "tbl_trainer": {
+                            "trainerId": 1,
+                            "trainerName": "steve roger",
+                            "trainerEmail": "steveroger@infomail.com",
+                            "trainerPhone": "020-232432342",
+                            "trainerAddress": "new york USA",
+                            "trainerPhoto": "https:aws.s3.image@aws.com",
+                            "status": true,
+                            "createdAt": "2020-10-24T06:44:28.000Z",
+                            "updatedAt": "2020-10-24T06:44:28.000Z"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "upcomingTrainings": [
+                        {
+                          "trainingId": 21,
+                          "startDate": "2020-12-04T18:30:00.000Z",
+                          "endDate": "2020-12-24T18:30:00.000Z",
+                          "topicName": "Node.js",
+                          "trainerId": 4,
+                          "registrationStartDate": "2020-10-31T18:30:00.000Z",
+                          "registrationEndDate": "2020-11-04T18:30:00.000Z",
+                          "maxAttendees": 30,
+                          "createdAt": "2020-11-02T08:05:08.000Z",
+                          "updatedAt": "2020-11-02T08:05:08.000Z"
+                        }
+                      ]
+                    },
+                    {
+                      "ongoingTrainings": [
+                        {
+                          "trainingId": 19,
+                          "startDate": "2020-11-24T18:30:00.000Z",
+                          "endDate": "2020-12-19T18:30:00.000Z",
+                          "topicName": "Node.js",
+                          "trainerId": 4,
+                          "registrationStartDate": "2020-09-30T18:30:00.000Z",
+                          "registrationEndDate": "2020-10-04T18:30:00.000Z",
+                          "maxAttendees": 30,
+                          "createdAt": "2020-11-02T06:34:24.000Z",
+                          "updatedAt": "2020-11-02T06:34:24.000Z"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "create a new training program",
+        "tags": [
+          "Training-program"
+        ],
+        "x-amazon-apigateway-auth": {
+          "type": "NONE"
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  },
+                  "topicName": {
+                    "type": "string"
+                  },
+                  "trainerId": {
+                    "type": "string"
+                  },
+                  "regiStartDate": {
+                    "type": "string"
+                  },
+                  "regiEndDate": {
+                    "type": "string"
+                  },
+                  "maxAttendees": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
         },
         "responses": {
           "200": {
-            "description": "New trainer created"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "new training-program created successfully"
+                }
+              }
+            }
           }
         }
       }
@@ -126,7 +547,7 @@
   "components": {
     "schemas": {
       "Trainer": {
-        "description": "A JSON array of trainers",
+        "description": "A detailed schema of trainers",
         "properties": {
           "trainerId": {
             "type": "integer"
@@ -148,8 +569,53 @@
           },
           "status": {
             "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
           }
         }
+      },
+      "Training-program": {
+        "description": "A detailed scehema of training-program",
+        "properties": {
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "topicName": {
+            "type": "string"
+          },
+          "trainerId": {
+            "type": "string"
+          },
+          "regiStartDate": {
+            "type": "boolean"
+          },
+          "regiEndDate": {
+            "type": "integer"
+          },
+          "maxAttendees": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
       }
     }
   }

@@ -29,7 +29,7 @@ module.exports = () => {
   app.use(bodyParser.json());
   app.use(logger('dev'));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  app.use(api.TRAINERS, authApi.Validate, trainerRoute);
+  app.use(api.TRAINERS, trainerRoute);
   app.use(api.TRAINING_PROGRAM, trainingProgramRoute);
   app.use(api.AUTHENTICATE, authRoute);
 

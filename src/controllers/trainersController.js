@@ -48,11 +48,11 @@ async function createTrainer(req, res) {
 async function deleteTrainer(req, res) {
   try {
     const result = await trainerService.deleteTrainer(req.params.id);
-    console.log('deleet' + result);
-    if (result) {
-      return res.status(200).send(result);
+    if (result[1] == 1) {
+      return res.status(200).send('trainer deleted successfully');
+    } else {
+      throw new Error('Trainer not found');
     }
-    throw new Error('Trainer not found');
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -116,7 +116,7 @@ async function getTrainingStatics(req, res) {
 
   try {
     const result = await trainerService.getTrainingStatics(firstDate, lastDate);
-    console.log('contro' + result);
+
     return res.status(200).json({ result });
   } catch (error) {
     return res.status(500).json({ error: error.message });

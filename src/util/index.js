@@ -1,6 +1,5 @@
 const db = {
-  connection: require("./DbConnection"),
-  //   employees: require(""),
+  connection: require('./DbConnection'),
 };
 
 module.exports = db;

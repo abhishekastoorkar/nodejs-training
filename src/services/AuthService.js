@@ -8,13 +8,10 @@ class AuthService {
       UserPoolId: config.cognito.userPoolId,
       ClientId: config.cognito.clientId,
     };
-    //const poolRegion = config.cognito.region
-
     this.userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
   }
 
   async signUp(userData) {
-    console.log('inside signup' + userData.name);
     return await new Promise((resolve, reject) => {
       const name = userData.name;
       const email = userData.email;
@@ -77,7 +74,7 @@ class AuthService {
       const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(
         authenticationData
       );
-      // console.log(authenticationDetails);
+
       const userData = {
         Username: username,
         Pool: this.userPool,
